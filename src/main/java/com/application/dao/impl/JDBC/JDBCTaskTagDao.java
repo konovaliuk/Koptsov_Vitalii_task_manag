@@ -8,20 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCTaskTagDao implements TaskTagDao {
-    private final Connection connection;
     private final String GET_TAG_BY_ID = "select name, description from `task_tag` where id = ?";
     private final String GET_ALL_TAGS = "select id, name, description from `task_tag`";
     private final String INSERT_TAG = "insert into `task_tag`(`name`,`description`) values (?, ?)";
     private final String UPDATE_TAG = "update `task_tag` set name = ?, description = ? where id = ?";
     private final String DELETE_TAG = "delete from `task_tag` where id = ?";
 
-    public JDBCTaskTagDao(Connection connection)
-    {
-        this.connection = connection;
-    }
-
     @Override
-    public TaskTag get(long id) {
+    public TaskTag get(Connection connection, long id) {
         try (PreparedStatement get = connection.prepareStatement(GET_TAG_BY_ID))
         {
             get.setLong(1,id);
@@ -42,7 +36,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
     }
 
     @Override
-    public List<TaskTag> getAll() {
+    public List<TaskTag> getAll(Connection connection) {
         try (PreparedStatement getAll = connection.prepareStatement(GET_ALL_TAGS))
         {
             ResultSet tags = getAll.executeQuery();
@@ -64,7 +58,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
     }
 
     @Override
-    public TaskTag save(TaskTag taskTag) {
+    public TaskTag save(Connection connection, TaskTag taskTag) {
         try (PreparedStatement save = connection.prepareStatement(INSERT_TAG, Statement.RETURN_GENERATED_KEYS))
         {
             save.setString(1,taskTag.getName());
@@ -85,7 +79,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
     }
 
     @Override
-    public void update(TaskTag taskTag) {
+    public void update(Connection connection, TaskTag taskTag) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_TAG))
         {
             update.setString(1,taskTag.getName());
@@ -101,7 +95,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Connection connection, long id) {
         try (PreparedStatement delete = connection.prepareStatement(DELETE_TAG))
         {
             delete.setLong(1,id);

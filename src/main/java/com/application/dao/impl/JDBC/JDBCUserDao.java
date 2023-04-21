@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCUserDao implements UserDao {
-    private final Connection connection;
     private final String GET_USER_BY_ID = "select u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where u.id = ?";
     private final String GET_LOGIN_INFO = "select id, first_name, last_name, password from `user` where login = ? or email = ?";
@@ -25,13 +24,9 @@ public class JDBCUserDao implements UserDao {
             " from `user` as u join `user_role` as r on u.user_role_id = r.id join task_user as tu on tu.user_id = u.id join task as t on t.id = tu.task_id where t.id = ?";
     private final String GET_USER_BY_USER_ROLE = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where r.id = ?";
-    public JDBCUserDao(Connection connection)
-    {
-        this.connection = connection;
-    }
 
     @Override
-    public User get(long id) {
+    public User get(Connection connection, long id) {
         try (PreparedStatement get = connection.prepareStatement(GET_USER_BY_ID))
         {
             get.setLong(1,id);
@@ -62,7 +57,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(Connection connection) {
         try (PreparedStatement getAll = connection.prepareStatement(GET_ALL_USERS))
         {
             ResultSet userResult = getAll.executeQuery();
@@ -94,7 +89,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public User save(User user) {
+    public User save(Connection connection, User user) {
         try (PreparedStatement save = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS))
         {
             save.setString(1,user.getFirstName());
@@ -125,7 +120,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void update(User user) {
+    public void update(Connection connection, User user) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_USER))
         {
             update.setString(1,user.getFirstName());
@@ -150,7 +145,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Connection connection, long id) {
         try (PreparedStatement delete = connection.prepareStatement(DELETE_USER))
         {
             delete.setLong(1,id);
@@ -165,7 +160,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public User getLoginInfo(String login) {
+    public User getLoginInfo(Connection connection, String login) {
         try (PreparedStatement getLogin = connection.prepareStatement(GET_LOGIN_INFO))
         {
             getLogin.setString(1,login);
@@ -189,7 +184,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void updateLoginInfo(User user) {
+    public void updateLoginInfo(Connection connection, User user) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_LOGIN_INFO))
         {
             update.setString(1,user.getLogin());
@@ -206,7 +201,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public List<TaskUser> getUsersByTask(Task task) {
+    public List<TaskUser> getUsersByTask(Connection connection, Task task) {
         try (PreparedStatement getUsersByTask = connection.prepareStatement(GET_USERS_BY_TASK))
         {
             getUsersByTask.setLong(1, task.getId());
@@ -243,7 +238,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getUsersByUserRole(UserRole userRole) {
+    public List<User> getUsersByUserRole(Connection connection, UserRole userRole) {
         try (PreparedStatement getUsersByUserRole = connection.prepareStatement(GET_USER_BY_USER_ROLE))
         {
             getUsersByUserRole.setLong(1, userRole.getId());

@@ -1,5 +1,6 @@
-package com.application.dao.impl;
+package com.application.dao;
 
+import com.application.dao.ConnectionPool;
 import com.application.dao.interfaces.*;
 import com.application.model.TaskTaskTag;
 import com.application.model.UserRole;
@@ -8,7 +9,6 @@ import java.sql.Connection;
 import java.util.function.Function;
 
 public abstract class DaoFactory {
-    protected Connection connection;
     private TaskDao taskDao;
     private TaskRoleDao taskRoleDao;
     private TaskStatusDao taskStatusDao;
@@ -17,10 +17,6 @@ public abstract class DaoFactory {
     private TaskUserDao taskUserDao;
     private UserDao userDao;
     private UserRoleDao userRoleDao;
-    public DaoFactory(Connection connection)
-    {
-        this.connection = connection;
-    }
     public TaskDao getTaskDao() {
         if(taskDao == null)
         {

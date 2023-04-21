@@ -1,4 +1,4 @@
-package com.application;
+package com.application.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,7 +42,6 @@ public class ConnectionPool {
     {
         avaliable.add(connection);
         inUse.remove(connection);
-        // remove return bool???
     }
 
     public void shutdown()

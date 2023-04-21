@@ -8,20 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCUserRoleDao implements UserRoleDao {
-    private final Connection connection;
     private final String GET_USER_ROLE_BY_ID = "select name from `user_role` where id = ?";
     private final String GET_ALL_USER_ROLES = "select id, name from `user_role`";
     private final String INSERT_USER_ROLE = "insert into `user_role`(`name`) values (?)";
     private final String UPDATE_USER_ROLE = "update `user_role` set name = ? where id = ?";
     private final String DELETE_USER_ROLE = "delete from `user_role` where id = ?";
-    public JDBCUserRoleDao(Connection connection)
-    {
-        this.connection = connection;
-    }
 
     @Override
-    public UserRole get(long id) {
-        try (PreparedStatement get = connection.prepareStatement(GET_ALL_USER_ROLES))
+    public UserRole get(Connection connection, long id) {
+        try (PreparedStatement get = connection.prepareStatement(GET_USER_ROLE_BY_ID))
         {
             get.setLong(1,id);
             ResultSet taskRole = get.executeQuery();
@@ -40,7 +35,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
     }
 
     @Override
-    public List<UserRole> getAll() {
+    public List<UserRole> getAll(Connection connection) {
         try (PreparedStatement getAll = connection.prepareStatement(GET_ALL_USER_ROLES))
         {
             ResultSet userRolesResult = getAll.executeQuery();
@@ -61,7 +56,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
     }
 
     @Override
-    public UserRole save(UserRole userRole) {
+    public UserRole save(Connection connection, UserRole userRole) {
         try (PreparedStatement save = connection.prepareStatement(INSERT_USER_ROLE, Statement.RETURN_GENERATED_KEYS))
         {
             save.setString(1,userRole.getName());
@@ -81,7 +76,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
     }
 
     @Override
-    public void update(UserRole userRole) {
+    public void update(Connection connection, UserRole userRole) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_USER_ROLE))
         {
             update.setString(1,userRole.getName());
@@ -96,7 +91,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Connection connection, long id) {
         try (PreparedStatement delete = connection.prepareStatement(DELETE_USER_ROLE))
         {
             delete.setLong(1,id);

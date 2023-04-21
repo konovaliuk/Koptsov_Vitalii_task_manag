@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class JDBCTaskDao implements TaskDao {
-    private final Connection connection;
     private final String GET_TASK_BY_ID = "select t.name, t.description, t.creation_date, t.deadline_date, ts.id as status_id, ts.name as status_name, ts.description as status_descripton, t.priority" +
             " from `task` as t join `task_status` as ts on t.task_status_id = ts.id where t.id = ?";
     private final String GET_ALL_TASKS = "select t.id, t.name, t.description, t.creation_date, t.deadline_date, ts.id as status_id, ts.name as status_name, ts.description as status_descripton, t.priority" +
@@ -20,13 +19,9 @@ class JDBCTaskDao implements TaskDao {
     private final String DELETE_TASK = "delete form `task` where id = ?";
     private final String GET_TASKS_BY_USER = "select t.id, t.name, t.description, t.creation_date, t.deadline_date, ts.id, ts.name as status_name, ts.description, t.priority, tr.id, tr.name " +
             "from `task` as t join `task_status` as ts on t.task_status_id = ts.id join task_user as tu on tu.task_id = t.id join `user` as u on u.id = tu.user_id join task_role as tr on tr.id = tu.task_role_id where u.id = ?";
-    public JDBCTaskDao(Connection connection)
-    {
-        this.connection = connection;
-    }
 
     @Override
-    public Task get(long id) {
+    public Task get(Connection connection, long id) {
         try (PreparedStatement get = connection.prepareStatement(GET_TASK_BY_ID))
         {
             get.setLong(1,id);
@@ -53,7 +48,7 @@ class JDBCTaskDao implements TaskDao {
     }
 
     @Override
-    public List<Task> getAll() {
+    public List<Task> getAll(Connection connection) {
         try (PreparedStatement getAll = connection.prepareStatement(GET_ALL_TASKS))
         {
             ResultSet tasksResult = getAll.executeQuery();
@@ -81,7 +76,7 @@ class JDBCTaskDao implements TaskDao {
     }
 
     @Override
-    public Task save(Task task) {
+    public Task save(Connection connection, Task task) {
         try (PreparedStatement save = connection.prepareStatement(INSERT_TASK, Statement.RETURN_GENERATED_KEYS))
         {
             save.setString(1,task.getName());
@@ -106,7 +101,7 @@ class JDBCTaskDao implements TaskDao {
     }
 
     @Override
-    public void update(Task task) {
+    public void update(Connection connection, Task task) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_TASK))
         {
             update.setString(1,task.getName());
@@ -126,7 +121,7 @@ class JDBCTaskDao implements TaskDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Connection connection, long id) {
         try (PreparedStatement delete = connection.prepareStatement(DELETE_TASK))
         {
             delete.setLong(1,id);
@@ -140,7 +135,7 @@ class JDBCTaskDao implements TaskDao {
     }
 
     @Override
-    public List<TaskUser> getTasksByUser(User user) {
+    public List<TaskUser> getTasksByUser(Connection connection, User user) {
         try (PreparedStatement getTasksByUser = connection.prepareStatement(GET_TASKS_BY_USER))
         {
             getTasksByUser.setLong(1, user.getId());

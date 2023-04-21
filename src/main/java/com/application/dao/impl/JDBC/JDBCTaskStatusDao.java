@@ -8,20 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCTaskStatusDao implements TaskStatusDao {
-    private final Connection connection;
     private final String GET_STATUS_BY_ID = "select name, description from `task_status` where id = ?";
     private final String GET_ALL_STATUSES = "select id, name, description from `task_status`";
     private final String INSERT_STATUS = "insert into `task_status`(`name`,`description`) values (?, ?)";
     private final String UPDATE_STATUS = "update `task_status` set name = ?, description = ? where id = ?";
     private final String DELETE_STATUS = "delete from `task_status` where id = ?";
 
-    public JDBCTaskStatusDao(Connection connection)
-    {
-        this.connection = connection;
-    }
-
     @Override
-    public TaskStatus get(long id) {
+    public TaskStatus get(Connection connection, long id) {
         try (PreparedStatement get = connection.prepareStatement(GET_STATUS_BY_ID))
         {
             get.setLong(1,id);
@@ -42,7 +36,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
     }
 
     @Override
-    public List<TaskStatus> getAll() {
+    public List<TaskStatus> getAll(Connection connection) {
         try (PreparedStatement getAll = connection.prepareStatement(GET_ALL_STATUSES))
         {
             ResultSet tags = getAll.executeQuery();
@@ -64,7 +58,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
     }
 
     @Override
-    public TaskStatus save(TaskStatus taskStatus) {
+    public TaskStatus save(Connection connection, TaskStatus taskStatus) {
         try (PreparedStatement save = connection.prepareStatement(INSERT_STATUS, Statement.RETURN_GENERATED_KEYS))
         {
             save.setString(1,taskStatus.getName());
@@ -85,7 +79,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
     }
 
     @Override
-    public void update(TaskStatus taskStatus) {
+    public void update(Connection connection, TaskStatus taskStatus) {
         try (PreparedStatement update = connection.prepareStatement(UPDATE_STATUS))
         {
             update.setString(1,taskStatus.getName());
@@ -102,7 +96,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Connection connection, long id) {
         try (PreparedStatement delete = connection.prepareStatement(DELETE_STATUS))
         {
             delete.setLong(1,id);

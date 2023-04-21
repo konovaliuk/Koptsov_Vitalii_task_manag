@@ -1,49 +1,50 @@
 package com.application.dao.impl.JDBC;
 
-import com.application.dao.impl.DaoFactory;
+import com.application.dao.ConnectionPool;
+import com.application.dao.DaoFactory;
 import com.application.dao.interfaces.*;
 
 import java.sql.Connection;
 
 public class JDBCDaoFactory extends DaoFactory {
-    public JDBCDaoFactory(Connection connection) { super(connection); }
+    public JDBCDaoFactory() { super(); }
     @Override
     protected TaskDao createTaskDao() {
-        return new JDBCTaskDao(connection);
+        return new JDBCTaskDao();
     }
 
     @Override
     protected TaskRoleDao createTaskRoleDao() {
-        return new JDBCTaskRoleDao(connection);
+        return new JDBCTaskRoleDao();
     }
 
     @Override
     protected TaskStatusDao createTaskStatusDao() {
-        return new JDBCTaskStatusDao(connection);
+        return new JDBCTaskStatusDao();
     }
 
     @Override
     protected TaskTagDao createTaskTagDao() {
-        return new JDBCTaskTagDao(connection);
+        return new JDBCTaskTagDao();
     }
 
     @Override
     protected TaskTaskTagDao createTaskTaskTagDao() {
-        return new JDBCTaskTaskTag(connection);
+        return new JDBCTaskTaskTag();
     }
 
     @Override
     protected TaskUserDao createTaskUserDao() {
-        return new JDBCTaskUserDao(connection);
+        return new JDBCTaskUserDao();
     }
 
     @Override
     protected UserDao createUserDao() {
-        return new JDBCUserDao(connection);
+        return new JDBCUserDao();
     }
 
     @Override
     protected UserRoleDao createUserRoleDao() {
-        return new JDBCUserRoleDao(connection);
+        return new JDBCUserRoleDao();
     }
 }
