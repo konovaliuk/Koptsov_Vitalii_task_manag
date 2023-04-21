@@ -7,7 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCTaskRoleDao implements TaskRoleDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskRoleDao.class);
     private final String GET_TASK_ROLE_BY_ID = "select name from `task_role` where id = ?";
     private final String GET_ALL_TASK_ROLES = "select id, name from `task_role`";
     private final String INSERT_TASK_ROLE = "insert into `task_role`(`name`) values (?)";
@@ -29,7 +33,7 @@ public class JDBCTaskRoleDao implements TaskRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get TaskRole by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -50,7 +54,7 @@ public class JDBCTaskRoleDao implements TaskRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all TaskRoles. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -70,7 +74,7 @@ public class JDBCTaskRoleDao implements TaskRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save TaskRole. TaskRole = " + taskRole.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -85,7 +89,7 @@ public class JDBCTaskRoleDao implements TaskRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update TaskRole. TaskRole = " + taskRole.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -99,7 +103,7 @@ public class JDBCTaskRoleDao implements TaskRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete TaskRole. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

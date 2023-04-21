@@ -7,7 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCTaskStatusDao implements TaskStatusDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskStatusDao.class);
     private final String GET_STATUS_BY_ID = "select name, description from `task_status` where id = ?";
     private final String GET_ALL_STATUSES = "select id, name, description from `task_status`";
     private final String INSERT_STATUS = "insert into `task_status`(`name`,`description`) values (?, ?)";
@@ -30,7 +34,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get TaskStatus by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -52,7 +56,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all TaskStatus. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -73,7 +77,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save TaskStatus. TaskStatus = " + taskStatus.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -89,7 +93,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update TaskStatus. TaskStatus = " + taskStatus.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -104,7 +108,7 @@ public class JDBCTaskStatusDao implements TaskStatusDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete TaskStatus. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
 

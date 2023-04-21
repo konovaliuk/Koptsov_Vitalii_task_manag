@@ -7,7 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCUserRoleDao implements UserRoleDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCUserRoleDao.class);
     private final String GET_USER_ROLE_BY_ID = "select name from `user_role` where id = ?";
     private final String GET_ALL_USER_ROLES = "select id, name from `user_role`";
     private final String INSERT_USER_ROLE = "insert into `user_role`(`name`) values (?)";
@@ -29,7 +33,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get UserRole by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -50,7 +54,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all UserRoles. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -70,7 +74,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save UserRole. UserRole = " + userRole.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -85,7 +89,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update UserRole. UserRole = " + userRole.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -99,7 +103,7 @@ public class JDBCUserRoleDao implements UserRoleDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete UserRole. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

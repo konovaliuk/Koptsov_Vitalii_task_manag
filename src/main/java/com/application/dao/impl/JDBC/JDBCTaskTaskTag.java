@@ -5,7 +5,11 @@ import com.application.model.TaskTaskTag;
 
 import java.sql.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCTaskTaskTag implements TaskTaskTagDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskTaskTag.class);
     private final String INSERT_TAG_TASK = "insert into `task_tag_task`(`task_id`,`task_tag_id`) values (?, ?)";
     private final String DELETE_TAG_TASK = "delete from `task_tag_task` where task_id = ? and task_tag_id = ?";
 
@@ -20,7 +24,7 @@ public class JDBCTaskTaskTag implements TaskTaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save TaskTaskTag. TaskTaskTag = " + taskTaskTag.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -35,7 +39,7 @@ public class JDBCTaskTaskTag implements TaskTaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete TaskTaskTag. TaskTaskTag = " + taskTaskTag.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

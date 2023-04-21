@@ -8,7 +8,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCUserDao implements UserDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCUserDao.class);
     private final String GET_USER_BY_ID = "select u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where u.id = ?";
     private final String GET_LOGIN_INFO = "select id, first_name, last_name, password from `user` where login = ? or email = ?";
@@ -51,7 +55,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get User by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -83,7 +87,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all Users. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -113,7 +117,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save User. User = " + user.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -139,7 +143,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update User. User = " + user.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -153,7 +157,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete User. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -178,7 +182,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get User logging info. Login = " + login + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -194,7 +198,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update User logging info. User = " + user.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -232,7 +236,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get Users by Task. Task = " + task.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -265,7 +269,7 @@ public class JDBCUserDao implements UserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get Users by UserRole. UserRole = " + userRole.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -1,5 +1,6 @@
 package com.application.dao.impl.JDBC;
 
+import com.application.dao.ConnectionPool;
 import com.application.dao.interfaces.TaskDao;
 import com.application.model.*;
 
@@ -8,7 +9,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 class JDBCTaskDao implements TaskDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskDao.class);
     private final String GET_TASK_BY_ID = "select t.name, t.description, t.creation_date, t.deadline_date, ts.id as status_id, ts.name as status_name, ts.description as status_descripton, t.priority" +
             " from `task` as t join `task_status` as ts on t.task_status_id = ts.id where t.id = ?";
     private final String GET_ALL_TASKS = "select t.id, t.name, t.description, t.creation_date, t.deadline_date, ts.id as status_id, ts.name as status_name, ts.description as status_descripton, t.priority" +
@@ -42,7 +47,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get Task by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -70,7 +75,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all Tasks. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -95,7 +100,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save Task. Task = " + task.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -115,7 +120,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update Task. Task = " + task.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -129,7 +134,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete Task. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -163,7 +168,7 @@ class JDBCTaskDao implements TaskDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t ger all Tasks for User. User = " + user.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

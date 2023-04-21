@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ConnectionPool {
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
     private List<Connection> avaliable;
     private List<Connection> inUse;
     private final int poolSize;
@@ -56,7 +60,7 @@ public class ConnectionPool {
             }
             catch (SQLException e)
             {
-                //TODO: add loging
+                LOGGER.error("Error while freeing connection : {}", e.getMessage());
             }
         }
         avaliable.clear();
@@ -80,7 +84,7 @@ public class ConnectionPool {
                 conn = DriverManager.getConnection(url, user, password);
             } catch (SQLException e)
             {
-                //TODO: add logging
+                LOGGER.error("Error while creation connection : {}", e.getMessage());
                 throw new RuntimeException(e);
             }
             return conn;

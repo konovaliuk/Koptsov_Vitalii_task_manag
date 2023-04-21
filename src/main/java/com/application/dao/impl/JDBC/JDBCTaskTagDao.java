@@ -7,7 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCTaskTagDao implements TaskTagDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskTagDao.class);
     private final String GET_TAG_BY_ID = "select name, description from `task_tag` where id = ?";
     private final String GET_ALL_TAGS = "select id, name, description from `task_tag`";
     private final String INSERT_TAG = "insert into `task_tag`(`name`,`description`) values (?, ?)";
@@ -30,7 +34,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get TaskTag by id. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -52,7 +56,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t get all TaskTags. " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -73,7 +77,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save TaskTag. TaskTag = " + taskTag.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -89,7 +93,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update TaskTag. TaskTag = " + taskTag.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -103,7 +107,7 @@ public class JDBCTaskTagDao implements TaskTagDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete TaskTag. Id = " + id + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

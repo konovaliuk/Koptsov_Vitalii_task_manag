@@ -5,7 +5,11 @@ import com.application.model.TaskUser;
 
 import java.sql.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JDBCTaskUserDao implements TaskUserDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskUserDao.class);
     private final String INSERT_TASK_USER = "insert into `task_user`(user_id, task_id, task_role_id) values (?, ?, ?)";
     private final String UPDATE_TASK_ROLE = "update `task_user` set task_role_id=? where task_id = ? and user_id = ?";
     private final String DELETE_TASK_USER = "delete from `task_user` where task_id = ? and user_id = ?";
@@ -21,7 +25,7 @@ public class JDBCTaskUserDao implements TaskUserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t save TaskUser. TaskUser = " + taskUser.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -37,7 +41,7 @@ public class JDBCTaskUserDao implements TaskUserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t update TaskUser. TaskUser = " + taskUser.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -52,7 +56,7 @@ public class JDBCTaskUserDao implements TaskUserDao {
         }
         catch (SQLException e)
         {
-            //TODO: add logging
+            LOGGER.error("Can`t delete TaskTag. TaskUser = " + taskUser.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
