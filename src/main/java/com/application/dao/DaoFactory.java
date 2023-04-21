@@ -1,12 +1,6 @@
 package com.application.dao;
 
-import com.application.dao.ConnectionPool;
 import com.application.dao.interfaces.*;
-import com.application.model.TaskTaskTag;
-import com.application.model.UserRole;
-
-import java.sql.Connection;
-import java.util.function.Function;
 
 public abstract class DaoFactory {
     private TaskDao taskDao;

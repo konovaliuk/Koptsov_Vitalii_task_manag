@@ -1,6 +1,5 @@
 package com.application.dao.impl.JDBC;
 
-import com.application.dao.ConnectionPool;
 import com.application.dao.DaoFactory;
 import com.application.dao.interfaces.*;
 
