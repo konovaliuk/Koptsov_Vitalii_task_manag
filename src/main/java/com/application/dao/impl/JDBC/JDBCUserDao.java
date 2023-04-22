@@ -13,20 +13,19 @@ import org.apache.logging.log4j.Logger;
 
 public class JDBCUserDao implements UserDao {
     private static final Logger LOGGER = LogManager.getLogger(JDBCUserDao.class);
-    private final String GET_USER_BY_ID = "select u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name" +
+    private final String GET_USER_BY_ID = "select u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where u.id = ?";
     private final String GET_LOGIN_INFO = "select id, first_name, last_name, password from `user` where login = ? or email = ?";
-    private final String UPDATE_LOGIN_INFO = "update `user` set login = ?, password = ? where id = ?";
-    private final String GET_ALL_USERS = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name" +
+    private final String GET_ALL_USERS = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id";
-    private final String INSERT_USER = "insert into `user`(`first_name`,`last_name`,`middle_name`, `telegram_tag`, `faculty`, `group`, `email`, `phone_number`, `day_of_birth`, `day_of_admission`, `user_role_id`)" +
-            " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_USER = "update `user` set first_name = ?, last_name = ?, middle_name = ?, telegram_tag=?, faculty=?,group=?,email=?,phone_number=?,day_of_birth=?,day_of_admission=?, user_role_id = ?" +
+    private final String INSERT_USER = "insert into `user`(`first_name`,`last_name`,`middle_name`, `telegram_tag`, `faculty`, `group`, `email`, `phone_number`, `day_of_birth`, `day_of_admission`, `user_role_id`, `password`, `login`)" +
+            " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_USER = "update `user` set first_name = ?, last_name = ?, middle_name = ?, telegram_tag=?, faculty=?,group=?,email=?,phone_number=?,day_of_birth=?,day_of_admission=?, user_role_id = ?, password = ?, login = ?" +
             " where id = ?";
     private final String DELETE_USER = "delete from `user` where id = ?";
-    private final String GET_USERS_BY_TASK = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name" +
+    private final String GET_USERS_BY_TASK = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id join task_user as tu on tu.user_id = u.id join task as t on t.id = tu.task_id where t.id = ?";
-    private final String GET_USER_BY_USER_ROLE = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission" +
+    private final String GET_USER_BY_USER_ROLE = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where r.id = ?";
 
     @Override
@@ -49,7 +48,22 @@ public class JDBCUserDao implements UserDao {
                 LocalDate admissionDay = user.getDate(10).toLocalDate();
                 long role_id = user.getLong(11);
                 String role_name = user.getString(12);
-                return new User(id, firstName,lastName,middleName,telegramTag,faculty,group,email,phoneNumber,birthday,admissionDay, new UserRole(role_id,role_name));
+                String login = user.getString(13);
+                String password = user.getString(14);
+                return new User(id,
+                        login,
+                        password,
+                        firstName,
+                        lastName,
+                        middleName,
+                        telegramTag,
+                        faculty,
+                        group,
+                        email,
+                        phoneNumber,
+                        birthday,
+                        admissionDay,
+                        new UserRole(role_id,role_name));
             }
             return null;
         }
@@ -81,7 +95,22 @@ public class JDBCUserDao implements UserDao {
                 LocalDate admissionDay = userResult.getDate(11).toLocalDate();
                 long role_id = userResult.getLong(12);
                 String role_name = userResult.getString(13);
-                users.add(new User(id, firstName,lastName,middleName,telegramTag,faculty,group,email,phoneNumber,birthday,admissionDay, new UserRole(role_id,role_name)));
+                String login = userResult.getString(14);
+                String password = userResult.getString(15);
+                users.add(new User(id,
+                        login,
+                        password,
+                        firstName,
+                        lastName,
+                        middleName,
+                        telegramTag,
+                        faculty,
+                        group,
+                        email,
+                        phoneNumber,
+                        birthday,
+                        admissionDay,
+                        new UserRole(role_id,role_name)));
             }
             return users;
         }
@@ -107,13 +136,28 @@ public class JDBCUserDao implements UserDao {
             save.setDate(9,java.sql.Date.valueOf(user.getBirthday()));
             save.setDate(10,java.sql.Date.valueOf(user.getAdmissionDay()));
             save.setLong(11,user.getRole().getId());
+            save.setString(12, user.getPassword());
+            save.setString(13,user.getLogin());
             save.executeUpdate();
             ResultSet id = save.getGeneratedKeys();
             long newId = 0;
             if (id.next()) {
                 newId = id.getLong(1);
             }
-            return new User(newId, user.getFirstName(),user.getLastName(),user.getMiddleName(),user.getTelegramTag(),user.getFaculty(),user.getGroup(),user.getEmail(),user.getPhoneNumber(),user.getBirthday(),user.getAdmissionDay(),user.getRole());
+            return new User(newId,
+                    user.getLogin(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getMiddleName(),
+                    user.getTelegramTag(),
+                    user.getFaculty(),
+                    user.getGroup(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getBirthday(),
+                    user.getAdmissionDay(),
+                    user.getRole());
         }
         catch (SQLException e)
         {
@@ -139,6 +183,8 @@ public class JDBCUserDao implements UserDao {
             update.setDate(10,java.sql.Date.valueOf(user.getAdmissionDay()));
             update.setLong(11,user.getRole().getId());
             update.setLong(11,user.getId());
+            update.setString(12,user.getPassword());
+            update.setString(13,user.getLogin());
             update.executeUpdate();
         }
         catch (SQLException e)
@@ -164,7 +210,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public User getLoginInfo(Connection connection, String login) {
+    public User getUserByLoginOrEmail(Connection connection, String login) {
         try (PreparedStatement getLogin = connection.prepareStatement(GET_LOGIN_INFO))
         {
             getLogin.setString(1,login);
@@ -185,23 +231,6 @@ public class JDBCUserDao implements UserDao {
             LOGGER.error("Can`t get User logging info. Login = " + login + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void updateLoginInfo(Connection connection, User user) {
-        try (PreparedStatement update = connection.prepareStatement(UPDATE_LOGIN_INFO))
-        {
-            update.setString(1,user.getLogin());
-            update.setString(2,user.getPassword());
-            update.setLong(3,user.getId());
-            update.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            LOGGER.error("Can`t update User logging info. User = " + user.toString() + ". " + e.getMessage());
-            throw new RuntimeException(e);
-        }
-
     }
 
     @Override
@@ -228,7 +257,22 @@ public class JDBCUserDao implements UserDao {
                 String role_name = userResult.getString(13);
                 long taskRoleId = userResult.getLong(14);
                 String taskRoleName = userResult.getString(15);
-                User user = new User(id, firstName,lastName,middleName,telegramTag,faculty,group,email,phoneNumber,birthday,admissionDay, new UserRole(role_id,role_name));
+                String login = userResult.getString(16);
+                String password = userResult.getString(17);
+                User user = new User(id,
+                        login,
+                        password,
+                        firstName,
+                        lastName,
+                        middleName,
+                        telegramTag,
+                        faculty,
+                        group,
+                        email,
+                        phoneNumber,
+                        birthday,
+                        admissionDay,
+                        new UserRole(role_id,role_name));
                 TaskRole taskRole = new TaskRole(taskRoleId, taskRoleName);
                 users.add(new TaskUser(task,user, taskRole));
             }
@@ -263,7 +307,22 @@ public class JDBCUserDao implements UserDao {
                 LocalDate admissionDay = userResult.getDate(11).toLocalDate();
                 long role_id = userResult.getLong(12);
                 String role_name = userResult.getString(13);
-                users.add(new User(id, firstName,lastName,middleName,telegramTag,faculty,group,email,phoneNumber,birthday,admissionDay, new UserRole(role_id,role_name)));
+                String login = userResult.getString(14);
+                String password = userResult.getString(15);
+                users.add(new User(id,
+                        login,
+                        password,
+                        firstName,
+                        lastName,
+                        middleName,
+                        telegramTag,
+                        faculty,
+                        group,
+                        email,
+                        phoneNumber,
+                        birthday,
+                        admissionDay,
+                        new UserRole(role_id,role_name)));
             }
             return users;
         }

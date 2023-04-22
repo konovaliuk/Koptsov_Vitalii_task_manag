@@ -102,8 +102,10 @@ public class User {
     public void setLogin(String login) { this.login = login; }
     public List<TaskUser> getUserTasks() { return userTasks; }
     public void setUserTasks(List<TaskUser> userTasks) { this.userTasks = userTasks;}
-    public User(long id, String firstName, String lastName, String middleName, String telegramTag, String faculty, String group, String email, String phoneNumber, LocalDate birthday, LocalDate admissionDay, UserRole userRole) {
+    public User(long id, String login, String password, String firstName, String lastName, String middleName, String telegramTag, String faculty, String group, String email, String phoneNumber, LocalDate birthday, LocalDate admissionDay, UserRole userRole) {
         this.id = id;
+        this.login = login;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -133,12 +135,5 @@ public class User {
                 ", admissionDay=" + admissionDay +
                 ", userRole=" + userRole +
                 '}';
-    }
-
-    public User(long id, String firstName, String lastName, String password) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
     }
 }
