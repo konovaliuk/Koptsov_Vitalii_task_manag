@@ -41,7 +41,8 @@ create table `user` (
     primary key (`id`),
     unique key `user_unq1` (`first_name`,`last_name`,`middle_name`),
     unique key `user_unq2` (`email`),
-    unique key `user_unq3` (`phone_number`)
+    unique key `user_unq3` (`phone_number`),
+    unique key `user_unq4` (`login`)
 ) engine = InnoDB;
 
 create table `task` (
