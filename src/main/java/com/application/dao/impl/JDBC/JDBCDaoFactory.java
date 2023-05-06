@@ -31,7 +31,7 @@ public class JDBCDaoFactory extends DaoFactory {
 
     @Override
     protected TaskTaskTagDao createTaskTaskTagDao() {
-        return new JDBCTaskTaskTag();
+        return new JDBCTaskTaskTagDao();
     }
 
     @Override

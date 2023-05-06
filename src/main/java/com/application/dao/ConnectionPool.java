@@ -18,6 +18,12 @@ public class ConnectionPool {
     private static ConnectionPool instance;
     private ConnectionPool(int size)
     {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        }catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
         ConnectionGenerator generator = new ConnectionGenerator();
         poolSize = size;
         avaliable = new ArrayList<>();

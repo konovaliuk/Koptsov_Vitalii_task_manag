@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.util.List;
 
 public interface UserDao extends Dao<User> {
-    public User getUserByLoginOrEmail(Connection connection, String login);
-    public List<TaskUser> getUsersByTask(Connection connection, Task task);
-    public List<User> getUsersByUserRole(Connection connection, UserRole userRole);
+    User getUserByLoginOrEmail(Connection connection, String login);
+    List<TaskUser> getUsersByTask(Connection connection, Task task);
+    List<User> getUsersByUserRole(Connection connection, UserRole userRole);
 }

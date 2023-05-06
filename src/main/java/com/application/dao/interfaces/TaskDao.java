@@ -6,5 +6,5 @@ import java.sql.Connection;
 import java.util.List;
 
 public interface TaskDao extends Dao<Task> {
-    public List<TaskUser> getTasksByUser(Connection connection, User user);
+    List<TaskUser> getTasksByUser(Connection connection, User user);
 }

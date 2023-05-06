@@ -15,7 +15,8 @@ public class JDBCUserDao implements UserDao {
     private static final Logger LOGGER = LogManager.getLogger(JDBCUserDao.class);
     private final String GET_USER_BY_ID = "select u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id where u.id = ?";
-    private final String GET_LOGIN_INFO = "select id, first_name, last_name, password from `user` where login = ? or email = ?";
+    private final String GET_LOGIN_INFO = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
+            " from `user` as u join `user_role` as r on u.user_role_id = r.id where login = ? or email = ?";
     private final String GET_ALL_USERS = "select u.id, u.first_name, u.last_name, u.middle_name, u.telegram_tag, u.faculty, u.group, u.email, u.phone_number, u.day_of_birth, u.day_of_admission, r.id, r.name, u.login, u.password" +
             " from `user` as u join `user_role` as r on u.user_role_id = r.id";
     private final String INSERT_USER = "insert into `user`(`first_name`,`last_name`,`middle_name`, `telegram_tag`, `faculty`, `group`, `email`, `phone_number`, `day_of_birth`, `day_of_admission`, `user_role_id`, `password`, `login`)" +
@@ -210,25 +211,49 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public User getUserByLoginOrEmail(Connection connection, String login) {
+    public User getUserByLoginOrEmail(Connection connection, String userLogin) {
         try (PreparedStatement getLogin = connection.prepareStatement(GET_LOGIN_INFO))
         {
-            getLogin.setString(1,login);
-            getLogin.setString(2,login);
+            getLogin.setString(1,userLogin);
+            getLogin.setString(2,userLogin);
             ResultSet user = getLogin.executeQuery();
             if(user.next())
             {
                 long id = user.getLong(1);
                 String firstName = user.getString(2);
                 String lastName = user.getString(3);
-                String password = user.getString(4);
-                return new User(id, firstName,lastName, password);
+                String middleName = user.getString(4);
+                String telegramTag = user.getString(5);
+                String faculty = user.getString(6);
+                String group = user.getString(7);
+                String email = user.getString(8);
+                String phoneNumber = user.getString(9);
+                LocalDate birthday = user.getDate(10).toLocalDate();
+                LocalDate admissionDay = user.getDate(11).toLocalDate();
+                long role_id = user.getLong(12);
+                String role_name = user.getString(13);
+                String login = user.getString(14);
+                String password = user.getString(15);
+                return new User(id,
+                        login,
+                        password,
+                        firstName,
+                        lastName,
+                        middleName,
+                        telegramTag,
+                        faculty,
+                        group,
+                        email,
+                        phoneNumber,
+                        birthday,
+                        admissionDay,
+                        new UserRole(role_id,role_name));
             }
             return null;
         }
         catch (SQLException e)
         {
-            LOGGER.error("Can`t get User logging info. Login = " + login + ". " + e.getMessage());
+            LOGGER.error("Can`t get User logging info. Login = " + userLogin + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

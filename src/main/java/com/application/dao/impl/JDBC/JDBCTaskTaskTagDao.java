@@ -8,8 +8,8 @@ import java.sql.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class JDBCTaskTaskTag implements TaskTaskTagDao {
-    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskTaskTag.class);
+public class JDBCTaskTaskTagDao implements TaskTaskTagDao {
+    private static final Logger LOGGER = LogManager.getLogger(JDBCTaskTaskTagDao.class);
     private final String INSERT_TAG_TASK = "insert into `task_tag_task`(`task_id`,`task_tag_id`) values (?, ?)";
     private final String DELETE_TAG_TASK = "delete from `task_tag_task` where task_id = ? and task_tag_id = ?";
 
@@ -43,4 +43,5 @@ public class JDBCTaskTaskTag implements TaskTaskTagDao {
             throw new RuntimeException(e);
         }
     }
+    //TODO: Add task by tag and vice versa
 }
