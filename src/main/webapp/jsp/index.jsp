@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,19 +9,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </head>
 <body>
-<c:if test="${empty sessionScope.user}">
+<c:if test="${empty sessionScope.User}">
   <jsp:include page="/jsp/unauthorized_header.jsp"/>
 </c:if>
-<c:if test="${not empty sessionScope.user}">
+<c:if test="${not empty sessionScope.User}">
   <jsp:include page="/jsp/authorized_header.jsp"/>
 </c:if>
-
-<div class="container">
-  <div class="jumbotron text-center">
-    <h1>Welcome to the best Beauty Salon in Kyiv!</h1>
-    <p>This is a simple example of a JSP page with a navbar.</p>
-  </div>
-</div>
 
 </body>
 </html>
