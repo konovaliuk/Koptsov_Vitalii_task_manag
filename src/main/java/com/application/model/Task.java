@@ -1,73 +1,39 @@
 package com.application.model;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 import java.util.List;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "task")
 public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String description;
-    private Instant creationDate;
-    private Instant deadline;
+    @Column(name = "creation_date")
+    private Timestamp creationDate;
+    @Column(name = "deadline_date")
+    private Timestamp deadline;
+    @ManyToOne
+    @JoinColumn(name = "task_status_id", nullable=false)
     private TaskStatus status;
     private short priority;
+    @OneToMany(mappedBy="task")
     private List<TaskUser> taskUsers;
+    @ManyToMany
+    @JoinTable(
+            name = "task_tag_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_tag_id"))
     private List<TaskTag> tags;
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public Instant getCreationDate() {
-        return creationDate;
-    }
-    public void setCreationDate(Instant creationDate) {
-        this.creationDate = creationDate;
-    }
-    public Instant getDeadline() {
-        return deadline;
-    }
-    public void setDeadline(Instant deadline) {
-        this.deadline = deadline;
-    }
-    public TaskStatus getStatus() {
-        return status;
-    }
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
-    public short getPriority() {
-        return priority;
-    }
-    public void setPriority(short priority) {
-        this.priority = priority;
-    }
-    public List<TaskUser> getTaskUsers() {
-        return taskUsers;
-    }
-    public void setTaskUsers(List<TaskUser> taskUsers) {
-        this.taskUsers = taskUsers;
-    }
-    public List<TaskTag> getTags() {
-        return tags;
-    }
-    public void setTags(List<TaskTag> tags) {
-        this.tags = tags;
-    }
-
     @Override
     public String toString() {
         return "Task{" +
@@ -79,14 +45,5 @@ public class Task {
                 ", status=" + status +
                 ", priority=" + priority +
                 '}';
-    }
-    public Task(long id, String name, String description, Instant creationDate, Instant deadline, TaskStatus status, short priority) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.creationDate = creationDate;
-        this.deadline = deadline;
-        this.status = status;
-        this.priority = priority;
     }
 }

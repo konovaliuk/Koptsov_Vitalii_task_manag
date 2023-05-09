@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    <persistence-unit name="TaskManager" transaction-type="RESOURCE_LOCAL">
+
+        <class>com.application.model.Task</class>
+        <class>com.application.model.TaskRole</class>
+        <class>com.application.model.TaskStatus</class>
+        <class>com.application.model.TaskTag</class>
+        <class>com.application.model.User</class>
+        <class>com.application.model.TaskUser</class>
+        <class>com.application.model.UserRole</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/tasks_control"/>
+            <property name="jakarta.persistence.jdbc.user" value="login"/>
+            <property name="jakarta.persistence.jdbc.password" value="password"/>
+            <property name="connection.pool_size" value="5" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+        </properties>
+    </persistence-unit>
+</persistence>

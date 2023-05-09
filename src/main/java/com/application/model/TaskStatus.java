@@ -2,35 +2,24 @@ package com.application.model;
 
 import java.util.List;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "task_status")
 public class TaskStatus {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String description;
+    @OneToMany
     private List<Task> tasks;
-    public long getId()
-    {
-        return id;
-    }
-    public void setId(long id) { this.id = id; }
-    public String getName()
-    {
-        return name;
-    }
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-    public String getDescription()
-    {
-        return description;
-    }
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-    public List<Task> getTasks() { return tasks; }
-    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
-
     @Override
     public String toString() {
         return "TaskStatus{" +
@@ -38,11 +27,5 @@ public class TaskStatus {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';
-    }
-
-    public TaskStatus(long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
     }
 }

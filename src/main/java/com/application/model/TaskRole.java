@@ -1,35 +1,28 @@
 package com.application.model;
 
 import java.util.List;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "task_role")
 public class TaskRole {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private List<Task> tasks;
-    private List<User> users;
-    public void setId(long id) { this.id = id; }
-    public long getId() {
-        return id;
-    }
-    public void setName(String name) { this.name = name; }
-    public String getName() {
-        return name;
-    }
-    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
-    public List<Task> getTasks() { return tasks; }
-    public void setUsers(List<User> users) { this.users = users; }
-    public List<User> getUsers() { return users; }
-
+    @OneToMany
+    private List<TaskUser> tasks;
     @Override
     public String toString() {
         return "TaskRole{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    public TaskRole(long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 }

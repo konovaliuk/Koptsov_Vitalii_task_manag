@@ -1,79 +1,14 @@
 package com.application.dao;
 
 import com.application.dao.interfaces.*;
+import jakarta.persistence.EntityManager;
 
 public abstract class DaoFactory {
-    private TaskDao taskDao;
-    private TaskRoleDao taskRoleDao;
-    private TaskStatusDao taskStatusDao;
-    private TaskTagDao taskTagDao;
-    private TaskTaskTagDao taskTaskTag;
-    private TaskUserDao taskUserDao;
-    private UserDao userDao;
-    private UserRoleDao userRoleDao;
-    public TaskDao getTaskDao() {
-        if(taskDao == null)
-        {
-            taskDao = createTaskDao();
-        }
-        return taskDao;
-    }
-    protected abstract TaskDao createTaskDao();
-    public TaskRoleDao getTaskRoleDao() {
-        if(taskRoleDao == null)
-        {
-            taskRoleDao = createTaskRoleDao();
-        }
-        return taskRoleDao;
-    }
-    protected abstract TaskRoleDao createTaskRoleDao();
-    public TaskStatusDao getTaskStatusDao() {
-        if(taskStatusDao == null)
-        {
-            taskStatusDao = createTaskStatusDao();
-        }
-        return taskStatusDao;
-    }
-    protected abstract TaskStatusDao createTaskStatusDao();
-    public TaskTagDao getTaskTagDao() {
-        if(taskTagDao == null)
-        {
-            taskTagDao = createTaskTagDao();
-        }
-        return taskTagDao;
-    }
-    protected abstract TaskTagDao createTaskTagDao();
-    public TaskTaskTagDao getTaskTaskTagDao() {
-        if(taskTaskTag == null)
-        {
-            taskTaskTag = createTaskTaskTagDao();
-        }
-        return taskTaskTag;
-    }
-    protected abstract TaskTaskTagDao createTaskTaskTagDao();
-    public TaskUserDao getTaskUserDao() {
-        if(taskUserDao == null)
-        {
-            taskUserDao = createTaskUserDao();
-        }
-        return taskUserDao;
-    }
-    protected abstract TaskUserDao createTaskUserDao();
-    public UserDao getUserDao() {
-        if(userDao == null)
-        {
-            userDao = createUserDao();
-        }
-        return userDao;
-    }
-    protected abstract UserDao createUserDao();
-    public UserRoleDao getUserRoleDao() {
-        if(userRoleDao == null)
-        {
-            userRoleDao = createUserRoleDao();
-        }
-        return userRoleDao;
-    }
-    protected abstract UserRoleDao createUserRoleDao();
-
+    public abstract TaskDao getTaskDao(EntityManager entityManager);
+    public abstract TaskRoleDao getTaskRoleDao(EntityManager entityManager);
+    public abstract TaskStatusDao getTaskStatusDao(EntityManager entityManager);
+    public abstract TaskTagDao getTaskTagDao(EntityManager entityManager);
+    public abstract UserDao getUserDao(EntityManager entityManager);
+    public abstract UserRoleDao getUserRoleDao(EntityManager entityManager);
+    public abstract TaskUserDao getTaskUserDao(EntityManager entityManager);
 }

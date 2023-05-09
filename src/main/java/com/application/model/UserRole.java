@@ -1,34 +1,25 @@
 package com.application.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "user_role")
 public class UserRole {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
         return "UserRole{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    public UserRole(long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 }
