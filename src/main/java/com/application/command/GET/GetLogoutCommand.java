@@ -16,6 +16,8 @@ public class GetLogoutCommand implements Command {
     }
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        if(req.getSession().getAttribute("User") == null)
+            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         req.getSession().invalidate();
         req.getRequestDispatcher("jsp/index.jsp").forward(req,resp);
     }

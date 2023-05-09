@@ -34,6 +34,23 @@ public class TaskService {
             ConnectionPool.getInstance().releaseConnection(con);
         }
     }
+
+    public Task getFullTask(long id) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try{
+            Task task = daoFactory.getTaskDao().get(con, id);
+            task.setTags(daoFactory.getTaskTagDao().getTaskTagsByTask(con, task));
+            task.setTaskUsers(daoFactory.getUserDao().getUsersByTask(con,task));
+            return task;
+        }
+        catch (Exception e){
+            LOGGER.error("Error: " + e.getMessage());
+            throw new RuntimeException("Error while getting task");
+        }
+        finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
     public List<Task> getAllTasks(){
         Connection con = ConnectionPool.getInstance().getConnection();
         try{
@@ -190,4 +207,5 @@ public class TaskService {
             ConnectionPool.getInstance().releaseConnection(con);
         }
     }
+
 }

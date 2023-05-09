@@ -19,6 +19,8 @@ public class GetRegisterCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        if(req.getSession().getAttribute("User") != null)
+            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"You already logged-in");
         List<UserRole> userRoles = serviceFactory.getUserRoleService().getAllUserRoles();
         req.setAttribute("roleList", userRoles);
         req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);

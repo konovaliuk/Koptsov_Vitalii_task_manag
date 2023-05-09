@@ -18,6 +18,11 @@
 <br>
 <br>
     <div class="container">
+        <c:if test="${not empty requestScope.error}">
+            <div class="alert alert-danger mt-3" role="alert">
+                <c:out value="${requestScope.error}"/>
+            </div>
+        </c:if>
         <form method = "POST" action = "/registration" novalidate>
             <div class="row g-3">
                 <div class="col-sm-4">
@@ -50,7 +55,7 @@
                 </div>
                 <div class="col-sm-12">
                     <label for="Phone" class="form-label">Phone number</label>
-                    <input type="tel" class="form-control" id="phoneNumber" name = "phoneNumber" placeholder="xxx-xxxx-xxxx" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" >
+                    <input type="tel" class="form-control" id="phoneNumber" name = "phoneNumber" placeholder="xxxxxxxxxx" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" >
                 </div>
                 <div class="col-sm-6">
                     <label for="birthday" class="form-label">Birthday date</label>
@@ -82,14 +87,9 @@
                     <input type="password" class="form-control" id="passwordConfirmation" name = "passwordConfirmation" placeholder="Confirm password">
                 </div>
                 <hr class="my-4">
-                <button class="w-100 btn btn-primary btn-lg" type="submit">Login</button>
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Register</button>
             </div>
         </form>
-        <c:if test="${not empty requestScope.error}">
-            <div class="alert alert-danger mt-3" role="alert">
-                <c:out value="${requestScope.error}"/>
-            </div>
-        </c:if>
     </div>
 </body>
 </html>

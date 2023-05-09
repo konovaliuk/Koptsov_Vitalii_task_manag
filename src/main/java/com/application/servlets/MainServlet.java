@@ -34,10 +34,12 @@ public class MainServlet extends HttpServlet {
         getCommands.put("/",new GetIndexCommand(serviceFactory));
         getCommands.put("/registration",new GetRegisterCommand(serviceFactory));
         getCommands.put("/tasks",new GetTasksCommand(serviceFactory));
-        getCommands.put("/task",new GetOneTaskCommand(serviceFactory));
+        getCommands.put("/edittask",new GetEditTaskCommand(serviceFactory));
+        getCommands.put("/task",new GetTaskCommand(serviceFactory));
+        getCommands.put("/logout", new GetLogoutCommand(serviceFactory));
         postCommands.put("/login", new PostLoginCommand(serviceFactory));
         postCommands.put("/registration", new PostRegisterCommand(serviceFactory));
-        getCommands.put("/logout", new GetLogoutCommand(serviceFactory));
+        postCommands.put("/edittask", new PostEditTaskCommand(serviceFactory));
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,36 +50,21 @@ public class MainServlet extends HttpServlet {
             command.execute(req,resp);
         }else
         {
-            try {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } catch (IOException e) {
-                LOGGER.error("Error in servlet: " + e.getMessage());
-                throw new RuntimeException(e);
-            }
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         LOGGER.error("POST " + req.getRequestURL());
         Command command = postCommands.get(req.getRequestURI());
         if(command != null)
         {
-            try {
-                command.execute(req,resp);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
-            }
+            command.execute(req,resp);
         }else
         {
-            try {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } catch (IOException e) {
-                LOGGER.error("Error in servlet: " + e.getMessage());
-                throw new RuntimeException(e);
-            }
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+
         }
     }
 }

@@ -8,23 +8,29 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-public class GetTasksCommand implements Command {
+public class GetTaskCommand implements Command {
     private final ServiceFactory serviceFactory;
-    public GetTasksCommand(ServiceFactory serviceFactory)
+    public GetTaskCommand(ServiceFactory serviceFactory)
     {
         this.serviceFactory = serviceFactory;
     }
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        if (req.getSession().getAttribute("User") == null)
-        {
+        if(req.getSession().getAttribute("User") == null)
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            throw new ServletException();
+
+        long id = 0;
+        try{
+            id = Long.parseLong(req.getParameter("id"));
+        }catch (Exception e)
+        {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
-        List<Task> taskList = serviceFactory.getTaskService().getAllTasks();
-        req.setAttribute("taskList", taskList);
-        req.getRequestDispatcher("jsp/tasks.jsp").forward(req, resp);
+        Task task = serviceFactory.getTaskService().getFullTask(id);
+        req.setAttribute("task", task);
+        req.getRequestDispatcher("jsp/task/task.jsp").forward(req, resp);
+
     }
 }

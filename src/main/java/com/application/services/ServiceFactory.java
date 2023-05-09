@@ -20,4 +20,8 @@ public class ServiceFactory {
     {
         return new UserRoleService(daoFactory);
     }
+    public TaskStatusService getTaskStatusService()
+    {
+        return new TaskStatusService(daoFactory);
+    }
 }

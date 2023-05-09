@@ -1,9 +1,10 @@
 package com.application.dao.impl.JDBC;
 
 import com.application.dao.interfaces.TaskTagDao;
-import com.application.model.TaskTag;
+import com.application.model.*;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class JDBCTaskTagDao implements TaskTagDao {
     private final String INSERT_TAG = "insert into `task_tag`(`name`,`description`) values (?, ?)";
     private final String UPDATE_TAG = "update `task_tag` set name = ?, description = ? where id = ?";
     private final String DELETE_TAG = "delete from `task_tag` where id = ?";
-
+    private final String GET_TASK_TAGS_BY_TASK = "select tt.id,tt.name,tt.description " +
+            "from task_tag as tt join task_tag_task as ttt on ttt.task_tag_id = tt.id join task as t on ttt.task_id = t.id where t.id = ?";
     @Override
     public TaskTag get(Connection connection, long id) {
         try (PreparedStatement get = connection.prepareStatement(GET_TAG_BY_ID))
@@ -108,6 +110,30 @@ public class JDBCTaskTagDao implements TaskTagDao {
         catch (SQLException e)
         {
             LOGGER.error("Can`t delete TaskTag. Id = " + id + ". " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<TaskTag> getTaskTagsByTask(Connection connection, Task task)
+    {
+        try (PreparedStatement getTasksByUser = connection.prepareStatement(GET_TASK_TAGS_BY_TASK))
+        {
+            getTasksByUser.setLong(1, task.getId());
+            ResultSet tasksResult = getTasksByUser.executeQuery();
+            List<TaskTag> taskTags = new ArrayList<TaskTag>();
+            while(tasksResult.next())
+            {
+                long id = tasksResult.getLong(1);
+                String name = tasksResult.getString(2);
+                String description = tasksResult.getString(3);
+                TaskTag tag = new TaskTag(id,name,description);
+                taskTags.add(tag);
+            }
+            return taskTags;
+        }
+        catch (SQLException e)
+        {
+            LOGGER.error("Can`t ger all TaskTags for Task. Task = " + task.toString() + ". " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
