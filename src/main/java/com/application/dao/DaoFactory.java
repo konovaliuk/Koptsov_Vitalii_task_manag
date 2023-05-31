@@ -2,7 +2,9 @@ package com.application.dao;
 
 import com.application.dao.interfaces.*;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Component;
 
+@Component
 public abstract class DaoFactory {
     public abstract TaskDao getTaskDao(EntityManager entityManager);
     public abstract TaskRoleDao getTaskRoleDao(EntityManager entityManager);
