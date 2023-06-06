@@ -28,6 +28,7 @@ public class User {
     @Column(name = "telegram_tag")
     private String telegramTag;
     private String faculty;
+    @Column(name = "`group`")
     private String group;
     private String email;
     @Column(name = "phone_number")
@@ -59,5 +60,9 @@ public class User {
                 ", admissionDay=" + admissionDay +
                 ", userRole=" + userRole +
                 '}';
+    }
+    public String getFullName()
+    {
+        return firstName + " " + middleName + " " + lastName;
     }
 }

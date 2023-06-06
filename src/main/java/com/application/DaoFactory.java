@@ -1,7 +1,8 @@
-package com.application.dao;
+package com.application;
 
 import com.application.dao.interfaces.*;
 import jakarta.persistence.EntityManager;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component

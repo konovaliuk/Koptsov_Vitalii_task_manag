@@ -4,6 +4,10 @@
   <groupId>org.example</groupId>
   <artifactId>webapp1</artifactId>
   <packaging>war</packaging>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
   <version>1.0-SNAPSHOT</version>
   <name>webapp1 Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -79,18 +83,13 @@
             </exclusions>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>3.1.0</version>
+        </dependency>
   </dependencies>
   <build>
     <finalName>webapp1</finalName>
-      <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                  <source>8</source>
-                  <target>8</target>
-              </configuration>
-          </plugin>
-      </plugins>
   </build>
 </project>

@@ -26,7 +26,7 @@ create table `user_role_right`(
 create table `user` (
 	`id` bigint unsigned NOT NULL AUTO_INCREMENT,
     `login` varchar(255) NULL,
-    `password` char(32) NULL,
+    `password` char(128) NULL,
     `first_name` varchar(255) NOT NULL,
     `last_name` varchar(255) NOT NULL,
     `middle_name` varchar(255),

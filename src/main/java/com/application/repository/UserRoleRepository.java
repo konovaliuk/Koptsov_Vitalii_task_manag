@@ -1,12 +1,11 @@
 package com.application.repository;
 
-import com.application.dao.DaoFactory;
 import com.application.dao.interfaces.UserRoleDao;
-import com.application.model.User;
 import com.application.model.UserRole;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.application.DaoFactory;
 
 import java.util.List;
 

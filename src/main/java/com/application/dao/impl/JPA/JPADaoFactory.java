@@ -1,10 +1,8 @@
 package com.application.dao.impl.JPA;
 
-import com.application.dao.DaoFactory;
 import com.application.dao.interfaces.*;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.application.DaoFactory;
 
 public class JPADaoFactory extends DaoFactory {
     @Override

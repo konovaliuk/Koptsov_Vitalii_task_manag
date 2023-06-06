@@ -1,27 +1,24 @@
 package com.application.services;
 
-import com.application.dao.ConnectionPool;
-import com.application.dao.DaoFactory;
 import com.application.model.Task;
-import com.application.model.TaskRole;
-import com.application.model.TaskUser;
-import com.application.model.User;
+import com.application.model.TaskStatus;
 import com.application.repository.TaskRepository;
+import com.application.repository.TaskStatusRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TaskService {
     private static final Logger LOGGER = LogManager.getLogger(TaskService.class);
     private final TaskRepository taskRepository;
+    private final TaskStatusRepository taskStatusRepository;
     public Task getTask(long id) {
         try{
             return taskRepository.findOne(id);
@@ -50,6 +47,14 @@ public class TaskService {
             throw new RuntimeException("Error while update task");
         }
     }
+
+    @Transactional(readOnly = true)
+    public void updateTask(Task task, Long taskStatusId){
+        TaskStatus status = taskStatusRepository.findOne(taskStatusId);
+        task.setStatus(status);
+        updateTask(task);
+    }
+
     @Transactional(readOnly = true)
     public Task createTask(Task task){
         try{

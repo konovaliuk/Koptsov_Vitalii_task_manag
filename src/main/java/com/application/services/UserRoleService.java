@@ -1,7 +1,5 @@
 package com.application.services;
 
-import com.application.dao.DaoFactory;
-import com.application.model.Task;
 import com.application.model.UserRole;
 import com.application.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +32,7 @@ public class UserRoleService{
         }
         catch (Exception e){
             LOGGER.error("Error : " + e.getMessage());
-            throw new RuntimeException("Error while getting all tasks");
+            throw e;
         }
     }
     @Transactional(readOnly = true)

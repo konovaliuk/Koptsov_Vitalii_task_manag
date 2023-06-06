@@ -1,6 +1,5 @@
 package com.application.services;
 
-import com.application.dao.ConnectionPool;
 import com.application.model.Task;
 import com.application.model.TaskUser;
 import com.application.model.User;
@@ -18,9 +17,11 @@ import java.util.stream.Collectors;
 
 import com.application.model.UserRole;
 import com.application.repository.UserRepository;
+import com.application.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,10 @@ import javax.security.auth.login.LoginException;
 @RequiredArgsConstructor
 public class UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final UserRoleRepository userRoleRepository;
     public User getUser(long id) {
         try{            
             return userRepository.findOne(id);
@@ -62,10 +66,11 @@ public class UserService {
         }
     }
     @Transactional(readOnly = true)
-    public User regiserUser(User user) throws SQLException {
-        Connection con = ConnectionPool.getInstance().getConnection();
+    public User regiserUser(User user, Long roleId) throws SQLException {
         try
         {
+            UserRole role = userRoleRepository.findOne(roleId);
+            user.setUserRole(role);
             byte[] salt = newSalt();
             byte[] hashedPassword = getPasswordHash(user.getPassword(), salt);
             UserPassword userPassword = new UserPassword(hashedPassword, salt);
@@ -73,6 +78,7 @@ public class UserService {
             User newUser = userRepository.save(user);
             return newUser;
         } catch (Exception e){
+            //TODO: could not execute statement [Duplicate entry 'shaddyreaper@gmail.com' for key 'user.user_unq2']
             LOGGER.error("Error: " + e.getMessage());
             throw e;
         }

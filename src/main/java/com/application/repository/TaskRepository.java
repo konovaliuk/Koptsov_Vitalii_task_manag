@@ -1,11 +1,11 @@
 package com.application.repository;
 
-import com.application.dao.DaoFactory;
 import com.application.dao.interfaces.TaskDao;
 import com.application.model.Task;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.application.DaoFactory;
 
 import java.util.List;
 

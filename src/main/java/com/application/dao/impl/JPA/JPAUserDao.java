@@ -70,9 +70,9 @@ public class JPAUserDao implements UserDao {
     }
     public User getUserByLoginOrEmail(String login)
     {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE U.login = :login OR u.email = :email", User.class);
-        query.setParameter(1, login);
-        query.setParameter(2, login);
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login OR u.email = :email", User.class);
+        query.setParameter("login", login);
+        query.setParameter("email", login);
         return query.getSingleResult();
     }
 }
